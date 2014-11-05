@@ -542,17 +542,27 @@ float leg_estimate::updateOdometry(std::vector<std::string> joint_name,
 
   // 2. Determine Primary Foot State
 
-  // 5. Analyse signals to infer covariance
-  // Classify/Detect Contact events: strike, break, swing, sway
-  foot_contact_classify_->setFootSensing(lfoot_sensing_, rfoot_sensing_);
-  float contact_classification = foot_contact_classify_->update(current_utime_, odom_to_primary_foot_fixed_,
-                                                       odom_to_secondary_foot_, standing_foot_);
+
   contact_status_id contact_status = F_STATUS_UNKNOWN;
   if (control_mode_ == CONTROLLER_STANDING){
     contact_status =footTransition(); // original method from Dehann, now set to be very conservative
   }else{
     contact_status =  footTransitionAlt();
   }
+
+  // 5. Analyse signals to infer covariance
+  // Classify/Detect Contact events: strike, break, swing, sway
+  float contact_classification = 0; // default is very accurate
+  foot_contact_classify_->setFootSensing(lfoot_sensing_, rfoot_sensing_);
+  if (contact_status == F_STATUS_UNKNOWN){
+    std::cout << "contact_status is F_STATUS_UNKNOWN, you should skip contact (covariance) classification  - cos there none; doh\n";
+    // just set it to be very bad 
+    contact_classification=-1;
+  }else{
+    contact_classification = foot_contact_classify_->update(current_utime_, odom_to_primary_foot_fixed_,
+                                                       odom_to_secondary_foot_, standing_foot_);
+  }
+
 
   // 3. Integrate the Leg Kinematics
   bool init_this_iteration = false;

@@ -178,7 +178,7 @@ int foot_contact_classify::updateWalkingPhase (int64_t utime, bool left_contact,
       if (verbose_ >= 3) std::cout << pv << ">0 | primary left. both in contact. still [LEFT_PRIME_RIGHT_STAND]\n";
       return 2;
     }else{
-      std::cout << "Unknown LEFT_PRIME_RIGHT_STAND Transition: " << pv<< "\n";
+      std::cout << "CLS Unknown LEFT_PRIME_RIGHT_STAND Transition: " << pv<< "\n";
       int blah;
       cin >> blah;
     }
