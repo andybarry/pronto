@@ -73,10 +73,11 @@ public:
    * @param[in]  param_fname    param file name to run from, "" means get from lcm
    * @param[in]  param_override_str    override param string
    * @param[in]  begin_timestamp lcm logfile message timestamp to start from. 0= start (ie from unixtime=0)
+   * @param[in]  lcm_publish_url url to publish lcm messages on
    */
   LCMFrontEnd(const std::string & in_log_fname, const std::string & out_log_fname = "",
       const std::string & param_fname = "", const std::string & param_override_str = "",
-      const std::string & begin_timestamp = "0", double processing_rate = 1.0);
+      const std::string & begin_timestamp = "0", double processing_rate = 1.0, std::string lcm_publish_url = "");
   ~LCMFrontEnd();
 
   template<class lcmType, class SensorHandlerClass>

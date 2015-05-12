@@ -27,6 +27,7 @@ public:
     string override_str = "";
     output_likelihood_filename = "";
     string begin_timestamp= "0";
+    string lcm_publish_url = "";
     smooth_at_end = false;
 
     ConciseArgs opt(argc, argv);
@@ -39,10 +40,12 @@ public:
         "Run Kalman smoothing and publish poses at end - only works when running from log");
     opt.add(output_likelihood_filename, "M", "meas_like", "save the measurement likelihood to this file");
     opt.add(begin_timestamp, "t", "begin_timestamp", "Run estimation from this timestamp"); // mfallon
+    opt.add(lcm_publish_url, "u", "lcm_publish_url", "Custom URL for LCM publishing");
     opt.parse();
 
     //create front end
-    front_end = new LCMFrontEnd(in_log_fname, out_log_fname, param_file, override_str,begin_timestamp);
+    front_end = new LCMFrontEnd(in_log_fname, out_log_fname, param_file, override_str,begin_timestamp, 1.0, lcm_publish_url);
+
     rbis_initializer = new RBISInitializer(front_end, RBISInitializer::getDefaultState(front_end->param),
         RBISInitializer::getDefaultCov(front_end->param));
 

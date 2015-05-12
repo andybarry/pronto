@@ -7,7 +7,7 @@ namespace MavStateEst {
 
 LCMFrontEnd::LCMFrontEnd(const std::string & in_log_fname, const std::string & out_log_fname,
     const std::string & param_fname, const std::string & param_override_str,
-    const std::string & begin_timestamp, double processing_rate)
+    const std::string & begin_timestamp, double processing_rate, std::string lcm_publish_url)
 {
 
   state_estimator = NULL;
@@ -45,7 +45,12 @@ LCMFrontEnd::LCMFrontEnd(const std::string & in_log_fname, const std::string & o
     }
   }
   else {
-    lcm_pub = new lcm::LCM(); // mfallon publish back to lcm if run from log
+    if (lcm_publish_url == "") {
+      lcm_pub = new lcm::LCM(); // mfallon publish back to lcm if run from log
+    }
+    else {
+      lcm_pub = new lcm::LCM(lcm_publish_url); // mfallon publish back to lcm if run from log
+    }
   }
 
   if (param_fname.empty()) {
